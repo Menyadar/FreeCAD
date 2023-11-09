@@ -51,6 +51,23 @@ class RemoteDebugger():
                 import ptvsd
                 ptvsd.enable_attach(address=(address, port), redirect_output=redirect)
                 ptvsd.wait_for_attach()
+
+            elif index == 2: # PyDev
+                address = self.dialog.lineEditAddress_pydev.text()
+                port = self.dialog.spinBoxPort_pydev.value()
+                redirect_out = self.dialog.checkRedirectOutput_pydev.isChecked()
+                redirect_err = self.dialog.checkRedirectErrors_pydev.isChecked()
+                suspend = self.dialog.checkSuspendImmediately_pydev.isChecked()
+
+                import pydevd_pycharm
+                pydevd_pycharm.settrace(
+                    address,
+                    port=port,
+                    stdoutToServer=redirect_out,
+                    stderrToServer=redirect_err,
+                    suspend=suspend
+                )
+
         except Exception as e:
             QtGui.QMessageBox.warning(self.dialog, "Failed to attach", str(e))
 
